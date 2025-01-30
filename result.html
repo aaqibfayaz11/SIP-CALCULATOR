@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Results</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Arial; 
+            background: #2c3e50; 
+            color: #ecf0f1; 
+            margin: 0;
+            padding: 20px;
+        }
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: #34495e; 
+            padding: 30px; 
+            border-radius: 10px;
+        }
+        h1 { 
+            color: #3498db; 
+            text-align: center; 
+            margin-bottom: 30px;
+        }
+        .result-box { 
+            background: #2c3e50; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin: 20px 0;
+        }
+        .result-item { 
+            margin: 15px 0; 
+            font-size: 18px;
+        }
+        .result-item span { 
+            color: #3498db; 
+            font-weight: bold;
+        }
+        img { 
+            width: 100%; 
+            border-radius: 8px; 
+            margin: 20px 0;
+        }
+        .breakdown { 
+            background: #2c3e50; 
+            padding: 20px; 
+            border-radius: 8px;
+        }
+        .download-btn { 
+            background: #27ae60; 
+            color: white; 
+            padding: 12px 25px; 
+            border-radius: 5px; 
+            text-decoration: none; 
+            display: inline-block; 
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Investment Results</h1>
+        
+        <div class="result-box">
+            <div class="result-item">
+                Future Value: <span>{{ future_value }}</span>
+            </div>
+            <div class="result-item">
+                Total Invested: <span>{{ total_invested }}</span>
+            </div>
+        </div>
+
+        <img src="data:image/png;base64,{{ plot_url }}" alt="Growth Chart">
+
+        <div class="breakdown">
+            <h3>Yearly Breakdown</h3>
+            <ul>
+                {% for entry in breakdown %}
+                <li>Year {{ entry.year }}: {{ entry.future_value }} (Invested: {{ entry.total_invested }})</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <form method="POST" action="/download">
+            <input type="hidden" name="monthly_investment" value="{{ request.form['monthly_investment'] }}">
+            <input type="hidden" name="annual_return" value="{{ request.form['annual_return'] }}">
+            <input type="hidden" name="years" value="{{ request.form['years'] }}">
+            <input type="hidden" name="inflation" value="{{ request.form['inflation'] }}">
+            <button class="download-btn" type="submit">Download PDF Report</button>
+        </form>
+
+        <a href="/" style="color: #3498db; display: block; text-align: center;">New Calculation</a>
+    </div>
+</body>
+</html>
